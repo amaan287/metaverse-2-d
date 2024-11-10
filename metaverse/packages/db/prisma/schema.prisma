@@ -1,3 +1,9 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,21 +16,21 @@ datasource db {
 model User {
   id       String  @id @unique @default(cuid())
   username String  @unique
-  password String  @unique
-  avatarId String
+  password String
+  avatarId String?
   role     Role
-  Space    Space[]
-  avatar   Avatar  @relation(fields: [avatarId], references: [id])
+  spaces   Space[]
+  avatar   Avatar? @relation(fields: [avatarId], references: [id])
 }
 
 model Space {
   id        String          @id @unique @default(cuid())
   name      String
   width     Int
-  height    Int?
+  height    Int
   thumbnail String?
-  adminId   String
-  admin     User            @relation(fields: [adminId], references: [id])
+  creatorId String
+  creator   User            @relation(fields: [creatorId], references: [id])
   elements  spaceElements[]
 }
 
@@ -42,6 +48,7 @@ model Element {
   id          String          @id @unique @default(cuid())
   width       Int
   height      Int
+  static      Boolean
   imageUrl    String
   spaces      spaceElements[]
   mapElements MapElements[]
@@ -52,6 +59,7 @@ model Map {
   width       Int
   height      Int
   name        String
+  thumbnail   String
   mapElements MapElements[]
 }
 
@@ -69,7 +77,7 @@ model Avatar {
   id       String  @id @unique @default(cuid())
   imageUrl String?
   name     String?
-  User     User[]
+  users    User[]
 }
 
 enum Role {
