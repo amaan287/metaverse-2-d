@@ -86,7 +86,7 @@ spaceRouter.delete("/:spaceId", userMiddleware, async (req, res) => {
     return;
   }
   if (space.creatorId !== req.userId) {
-    res.status(400).json({ message: "Unauthorized" });
+    res.status(403).json({ message: "Unauthorized" });
     return;
   }
   await client.space.delete({
